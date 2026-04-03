@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Penguin Courage Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="progress-wrap">
+        <div class="progress-bar">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+        <span id="levelText" class="level-text">Level 1</span>
+      </div>
+      <div class="score-box">Fish: <span id="score">0</span> 🐟</div>
+    </header>
+
+    <main class="game-card">
+      <div class="penguin-area">
+        <div id="penguin" class="penguin">🐧</div>
+        <div id="penguinMood" class="penguin-mood">
+          Ready to practice a gentle thought?
+        </div>
+      </div>
+
+      <section class="question-area">
+        <p class="label">Thought</p>
+        <h1 id="questionText" class="question-text">
+          I feel like I do not belong here.
+        </h1>
+
+        <p class="label">Choose the gentler thought</p>
+
+        <div id="answers" class="answers"></div>
+
+        <div id="feedback" class="feedback hidden"></div>
+
+        <div class="actions">
+          <button id="nextBtn" class="next-btn hidden">Next</button>
+          <button id="restartBtn" class="restart-btn hidden">Play Again</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
