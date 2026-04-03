@@ -213,9 +213,7 @@ button:hover {
   .answer-btn {
     font-size: 16px;
   }
-
-  #answers {
-  display: flex;
-  gap: 10px;
 }
+#answers button {
+  margin-right: 10px;
 }
