@@ -1,149 +1,217 @@
-const questions = [
-  {
-    thought: "I feel like I do not belong here.",
-    answers: [
-      "It is normal to feel out of place in a new environment, and belonging can take time.",
-      "That means I should stop trying and keep to myself."
-    ],
-    correctIndex: 0,
-    feedback:
-      "Yes... and maybe this feeling is part of adjusting, not proof that you will never belong."
-  },
-  {
-    thought: "My accent makes me sound less capable.",
-    answers: [
-      "My accent shows that I have lived, learned, and speak more than one language.",
-      "People will always think I am not smart."
-    ],
-    correctIndex: 0,
-    feedback:
-      "Gentle shift. An accent is not a weakness. It often carries courage, effort, and experience."
-  },
-  {
-    thought: "Everyone else understands how life works here except me.",
-    answers: [
-      "I am learning at my own pace, and many people feel confused when starting somewhere new.",
-      "I am behind everyone and there is no point asking for help."
-    ],
-    correctIndex: 0,
-    feedback:
-      "That is a kinder thought. Learning takes time, and needing time does not mean failure."
-  },
-  {
-    thought: "Because I feel lonely today, things will always stay like this.",
-    answers: [
-      "Lonely is a feeling, not a permanent future.",
-      "Yes, this proves nothing will improve."
-    ],
-    correctIndex: 0,
-    feedback: "Good catch. Feelings can be intense and still temporary."
-  },
-  {
-    thought: "I made one mistake, so I ruined everything.",
-    answers: [
-      "One mistake does not define me. I can repair, learn, and keep going.",
-      "I always mess things up."
-    ],
-    correctIndex: 0,
-    feedback:
-      "That is courage. A mistake can be part of growth, not the end of the story."
-  }
-];
-
-let currentQuestion = 0;
+let language = "es";
+let currentLevel = 0;
+let current = 0;
 let score = 0;
 
-const questionText = document.getElementById("questionText");
-const answersContainer = document.getElementById("answers");
-const feedback = document.getElementById("feedback");
-const nextBtn = document.getElementById("nextBtn");
-const restartBtn = document.getElementById("restartBtn");
-const scoreText = document.getElementById("score");
-const penguin = document.getElementById("penguin");
-const penguinMood = document.getElementById("penguinMood");
-const progressFill = document.getElementById("progressFill");
-const levelText = document.getElementById("levelText");
+const penguinImages = {
+  idle: "https://i.imgur.com/FJGERuP.jpg",
+  happy: "https://i.imgur.com/5257psB.jpg",
+  sad: "https://i.imgur.com/OVsgM1A.jpg"
+};
 
-function loadQuestion() {
-  const q = questions[currentQuestion];
+const correctSound = new Audio("https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3");
 
-  questionText.textContent = q.thought;
-  answersContainer.innerHTML = "";
-  feedback.classList.add("hidden");
-  feedback.textContent = "";
-  nextBtn.classList.add("hidden");
-
-  penguin.classList.remove("happy", "sad");
-  penguinMood.textContent = "Take a breath. Pick the gentler thought.";
-
-  q.answers.forEach((answer, index) => {
-    const btn = document.createElement("button");
-    btn.className = "answer-btn";
-    btn.textContent = answer;
-    btn.addEventListener("click", () => selectAnswer(index, btn));
-    answersContainer.appendChild(btn);
-  });
-
-  updateProgress();
+// 🧠 Card generator
+function makeCard(es, en, isPositive){
+  return {
+    es:{
+      q: es,
+      a: ["Pensamiento amable","Pensamiento negativo"],
+      c: isPositive ? 0 : 1,
+      f: isPositive 
+        ? "Eso es 💗 estás siendo amable contigo"
+        : "Podemos cambiar ese pensamiento 💗"
+    },
+    en:{
+      q: en,
+      a: ["Gentler thought","Negative thought"],
+      c: isPositive ? 0 : 1,
+      f: isPositive 
+        ? "Yes 💗 you're being kind to yourself"
+        : "We can reframe that 💗"
+    }
+  };
 }
 
-function selectAnswer(selectedIndex, selectedButton) {
-  const q = questions[currentQuestion];
-  const buttons = document.querySelectorAll(".answer-btn");
+// 🎮 LEVELS
+const levels = [
 
-  buttons.forEach((btn, index) => {
-    btn.disabled = true;
+  [
+    makeCard("Estoy aprendiendo", "I am learning", true),
+    makeCard("No soy suficiente", "I am not enough", false),
+    makeCard("Puedo mejorar", "I can improve", true),
+    makeCard("Siempre fallo", "I always fail", false),
+    makeCard("Estoy creciendo", "I am growing", true),
+    makeCard("Nada me sale bien", "Nothing works for me", false),
+    makeCard("Voy paso a paso", "I go step by step", true),
+    makeCard("Es imposible", "This is impossible", false),
+    makeCard("Estoy intentando", "I am trying", true),
+    makeCard("No puedo hacerlo", "I can't do this", false)
+  ],
 
-    if (index === q.correctIndex) {
-      btn.classList.add("correct");
-    }
+  [
+    makeCard("Esto es difícil pero puedo", "This is hard but I can", true),
+    makeCard("Nunca lo lograré", "I will never make it", false),
+    makeCard("Estoy aprendiendo de esto", "I am learning from this", true),
+    makeCard("Todo sale mal", "Everything goes wrong", false),
+    makeCard("Puedo adaptarme", "I can adapt", true),
+    makeCard("No tiene sentido", "There is no point", false),
+    makeCard("Estoy avanzando", "I am progressing", true),
+    makeCard("Soy un desastre", "I am a mess", false),
+    makeCard("Lo intento de nuevo", "I try again", true),
+    makeCard("No sirvo para esto", "I'm not good at this", false)
+  ],
 
-    if (index === selectedIndex && index !== q.correctIndex) {
-      btn.classList.add("wrong");
-    }
+  [
+    makeCard("No es perfecto pero está bien", "Not perfect but okay", true),
+    makeCard("Debo hacerlo perfecto", "I must be perfect", false),
+    makeCard("Estoy orgullosa de mí", "I am proud of myself", true),
+    makeCard("No valgo nada", "I am worthless", false),
+    makeCard("Estoy haciendo lo mejor que puedo", "I'm doing my best", true),
+    makeCard("Siempre arruino todo", "I ruin everything", false),
+    makeCard("Puedo descansar", "I can rest", true),
+    makeCard("No puedo parar", "I can't stop", false),
+    makeCard("Estoy mejorando cada día", "I'm improving every day", true),
+    makeCard("Nada cambiará", "Nothing will change", false)
+  ]
+];
+
+// 🐧 Penguin state
+function setPenguin(state){
+  let p = document.getElementById("penguin");
+  p.classList.remove("happy","sad");
+  p.src = penguinImages[state];
+  if(state==="happy") p.classList.add("happy");
+  if(state==="sad") p.classList.add("sad");
+}
+
+// 🎯 Load question
+function load(){
+  let q = levels[currentLevel][current][language];
+
+  document.getElementById("questionText").innerText = q.q;
+  document.getElementById("answers").innerHTML = "";
+  document.getElementById("feedback").classList.add("hidden");
+  document.getElementById("nextBtn").classList.add("hidden");
+
+  setPenguin("idle");
+
+  // 🌍 LANGUAGE TEXTS
+  document.getElementById("subtitle").innerText =
+    language==="es"
+    ? "Practica pensamientos más amables"
+    : "Practice gentler thoughts";
+
+  document.getElementById("penguinMood").innerText =
+    language==="es"
+    ? "Respira. Vamos paso a paso 💗"
+    : "Take a breath. One step at a time 💗";
+
+  document.getElementById("nextBtn").innerText =
+    language==="es" ? "Siguiente" : "Next";
+
+  document.getElementById("levelText").innerText =
+    language==="es"
+    ? "Nivel " + (currentLevel+1)
+    : "Level " + (currentLevel+1);
+
+  document.getElementById("completeTitle").innerText =
+    language==="es"
+    ? "Nivel completado 🎉"
+    : "Level complete 🎉";
+
+  document.getElementById("restartBtn").innerText =
+    language==="es"
+    ? "Reiniciar"
+    : "Restart";
+
+  // 🧠 Answers
+  q.a.forEach((text,i)=>{
+    let b = document.createElement("button");
+    b.innerText = text;
+    b.onclick = ()=>answer(i);
+    document.getElementById("answers").appendChild(b);
   });
 
-  if (selectedIndex === q.correctIndex) {
+  update();
+}
+
+// 🎯 Answer logic
+function answer(i){
+  let q = levels[currentLevel][current][language];
+  let buttons = document.querySelectorAll("#answers button");
+
+  buttons.forEach((b,index)=>{
+    b.disabled = true;
+    if(index===q.c) b.classList.add("correct");
+    if(index===i && i!==q.c) b.classList.add("wrong");
+  });
+
+  let mood = document.getElementById("penguinMood");
+
+  if(i===q.c){
     score++;
-    scoreText.textContent = score;
-    penguin.classList.add("happy");
-    penguinMood.textContent = "You helped the penguin feel braver 🐟";
+    correctSound.play();
+    setPenguin("happy");
+    mood.innerText = q.f;
   } else {
-    penguin.classList.add("sad");
-    penguinMood.textContent = "That is okay. We can try again gently.";
+    setPenguin("sad");
+    mood.innerText =
+      language==="es"
+      ? "Está bien 💗 intentemos otra forma"
+      : "That's okay 💗 let's try another way";
   }
 
-  feedback.textContent = q.feedback;
-  feedback.classList.remove("hidden");
+  document.getElementById("feedback").innerText = q.f;
+  document.getElementById("feedback").classList.remove("hidden");
+  document.getElementById("nextBtn").classList.remove("hidden");
+}
 
-  if (currentQuestion < questions.length - 1) {
-    nextBtn.classList.remove("hidden");
+// 📊 Score + progress
+function update(){
+  document.getElementById("score").innerText = score;
+
+  let progress = ((current + 1) / levels[currentLevel].length) * 100;
+  document.getElementById("progressFill").style.width = progress + "%";
+}
+
+// ➡️ Next
+document.getElementById("nextBtn").onclick = ()=>{
+  current++;
+
+  if(current < levels[currentLevel].length){
+    load();
   } else {
-    restartBtn.classList.remove("hidden");
-    penguinMood.textContent =
-      score >= Math.ceil(questions.length * 0.6)
-        ? "You finished with courage. The penguin is proud of you."
-        : "You made it through. Gentle practice still counts.";
+    currentLevel++;
+    current = 0;
+
+    if(currentLevel < levels.length){
+      alert(language==="es"?"Nuevo nivel ✨":"New level ✨");
+      load();
+    } else {
+      document.getElementById("levelComplete").classList.remove("hidden");
+    }
   }
-}
+};
 
-function updateProgress() {
-  const progress = (currentQuestion / questions.length) * 100;
-  progressFill.style.width = `${progress}%`;
-  levelText.textContent = `Level ${currentQuestion + 1}`;
-}
-
-nextBtn.addEventListener("click", () => {
-  currentQuestion++;
-  loadQuestion();
-});
-
-restartBtn.addEventListener("click", () => {
-  currentQuestion = 0;
+// 🔄 Restart
+document.getElementById("restartBtn").onclick = ()=>{
   score = 0;
-  scoreText.textContent = score;
-  restartBtn.classList.add("hidden");
-  loadQuestion();
-});
+  current = 0;
+  currentLevel = 0;
+  load();
+  document.getElementById("levelComplete").classList.add("hidden");
+};
 
-loadQuestion();
+// 🌍 Language toggle (FULL FIX)
+document.getElementById("langToggle").onclick = ()=>{
+  language = language==="es" ? "en" : "es";
+
+  document.getElementById("langToggle").innerText =
+    language==="es" ? "Español 🇪🇸" : "English 🇺🇸";
+
+  load();
+};
+
+// 🚀 Start game
+load();
