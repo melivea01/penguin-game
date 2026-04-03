@@ -2,12 +2,28 @@
   box-sizing: border-box;
 }
 
+/* your new styles */
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(180deg, #dff6ff 0%, #f7fcff 100%);
-  color: #183b56;
+  font-family: Arial, sans-serif;
+  background: #eaf3f7;
 }
+
+button {
+  padding: 12px;
+  margin: 6px 0;
+  border-radius: 10px;
+  border: none;
+  background: #7cc6c6;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #5fb0b0;
+}
+
+/* your existing styles below */
 
 .app {
   max-width: 760px;
