@@ -136,6 +136,56 @@ function load(){
   update();
 }
 
+function load(){
+  let q = levels[currentLevel][current][language];
+
+  // question
+  document.getElementById("questionText").innerText = q.q;
+
+  // reset
+  const answersDiv = document.getElementById("answers");
+  answersDiv.innerHTML = "";
+
+  document.getElementById("feedback").classList.add("hidden");
+  document.getElementById("nextBtn").classList.add("hidden");
+
+  setPenguin("idle");
+
+  // texts
+  document.getElementById("penguinMood").innerText =
+    language==="es"
+    ? "Respira. Vamos paso a paso 💗"
+    : "Take a breath. One step at a time 💗";
+
+  document.getElementById("nextBtn").innerText =
+    language==="es" ? "Siguiente" : "Next";
+
+  document.getElementById("levelText").innerText =
+    language==="es"
+    ? "Nivel " + (currentLevel+1)
+    : "Level " + (currentLevel+1);
+
+  document.getElementById("completeTitle").innerText =
+    language==="es"
+    ? "Nivel completado 🎉"
+    : "Level complete 🎉";
+
+  document.getElementById("restartBtn").innerText =
+    language==="es"
+    ? "Reiniciar"
+    : "Restart";
+
+  // ✅ THIS IS THE MISSING PART (buttons)
+  q.a.forEach((text,i)=>{
+    const btn = document.createElement("button");
+    btn.innerText = text;
+    btn.onclick = ()=>answer(i);
+    answersDiv.appendChild(btn);
+  });
+
+  update();
+}
+
 // 🎯 Answer logic
 function answer(i){
   let q = levels[currentLevel][current][language];
