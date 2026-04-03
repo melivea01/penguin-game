@@ -46,6 +46,10 @@ const levels = [
   [
     makeCard("Estoy mejorando cada día", "I'm improving every day", true),
     makeCard("Nada cambiará", "Nothing will change", false)
+  ],
+  [
+    makeCard("Estoy aprendiendo a valorarme", "I am learning to value myself", true),
+    makeCard("Siempre fallo", "I always fail", false)
   ]
 ];
 
