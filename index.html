@@ -1,62 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
-<header class="topbar">
-
-  <button id="langToggle">Español 🇪🇸</button>
-
-  <div class="progress-wrap">
-    <div class="progress-bar">
-      <div id="progressFill" class="progress-fill"></div>
-    </div>
-    <span id="levelText" class="level-text">Level 1</span>
-  </div>
-
-  <div class="score-box">
-    Fish: <span id="score">0</span> 🐟
-  </div>
-
-</header>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pingüino Valiente</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
 
 <body>
-  <div class="app">
-    <header class="topbar">
-      <div class="progress-wrap">
-        <div class="progress-bar">
-          <div id="progressFill" class="progress-fill"></div>
-        </div>
-        <span id="levelText" class="level-text">Level 1</span>
+
+<div class="app">
+
+  <header class="topbar">
+    <button id="langToggle">Español 🇪🇸</button>
+
+    <div class="progress-wrap">
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
       </div>
-      <div class="score-box">Fish: <span id="score">0</span> 🐟</div>
-    </header>
+      <span id="levelText" class="level-text">Nivel 1</span>
+    </div>
 
-    <main class="game-card">
-      <div class="penguin-area">
-        <div id="penguin" class="penguin">🐧</div>
-        <div id="penguinMood" class="penguin-mood">
-          Ready to practice a gentle thought?
-        </div>
-      </div>
+    <div class="score-box">
+      Peces: <span id="score">0</span> 🐟
+    </div>
+  </header>
 
-      <section class="question-area">
-        <p class="label">Thought</p>
-        <h1 id="questionText" class="question-text">
-          I feel like I do not belong here.
-        </h1>
+  <main class="game-card">
 
-        <p class="label">Choose the gentler thought</p>
+    <div class="penguin-area">
+      <img id="penguin" class="penguin" src="https://i.imgur.com/FJGERuP.jpg">
+      <div id="penguinMood">Respira. Vamos paso a paso 💗</div>
+    </div>
 
-        <div id="answers" class="answers"></div>
+    <h3 id="questionText"></h3>
 
-        <div id="feedback" class="feedback hidden"></div>
+    <div id="answers"></div>
 
-        <div class="actions">
-          <button id="nextBtn" class="next-btn hidden">Next</button>
-          <button id="restartBtn" class="restart-btn hidden">Play Again</button>
-        </div>
-      </section>
-    </main>
+    <div id="feedback" class="hidden"></div>
+
+    <button id="nextBtn" class="hidden">Siguiente</button>
+
+  </main>
+
+  <div id="levelComplete" class="hidden">
+    <h2 id="completeTitle">Nivel completado 🎉</h2>
+    <button id="restartBtn">Reiniciar</button>
   </div>
 
-  <script src="script.js"></script>
+</div>
+
+<script src="./script.js"></script>
+
 </body>
 </html>
