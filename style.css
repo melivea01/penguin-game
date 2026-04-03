@@ -217,3 +217,12 @@ button:hover {
 #answers button {
   margin-right: 10px;
 }
+#questionText {
+  text-align: center;
+}
+
+#answers {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
